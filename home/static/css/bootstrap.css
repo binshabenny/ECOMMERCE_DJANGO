@@ -470,6 +470,7 @@ mark,
   display: block;
   font-size: 80%;
   color: #6c757d;
+  position: relative;
 }
 
 .blockquote-footer::before {
