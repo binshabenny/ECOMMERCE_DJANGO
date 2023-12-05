@@ -1,14 +1,30 @@
 from django.shortcuts import render
-
+from .models import Slider
 # Create your views here.
 def index(request):
-    return render(request,'index.html')
+    banner = Slider.objects.all()
+    dict ={
+        'banners':banner
+    }
+    return render(request,'index.html',dict)
 
 def product(request):
-    return render(request,'product.html')
+    banner = Slider.objects.all()
+    dict ={
+        'banners':banner
+    }
+    return render(request,'product.html',dict)
 
 def logpage(request):
-    return render(request,'login.html')
+    banner = Slider.objects.all()
+    dict ={
+        'banners':banner
+    }
+    return render(request,'login.html',dict)
 
 def register(request):
-    return render(request,'register.html')
+    banner = Slider.objects.all()
+    dict ={
+        'banners':banner
+    }
+    return render(request,'register.html',dict)

@@ -1,7 +1,8 @@
 {% load static %}
+{% for sd in banners %}
 <section class="slider_section ">
     <div class="slider_bg_box">
-       <img src="{% static 'images/slider-bg.jpg'%}" alt="">
+       <img src={{sd.image.url}} alt="">
     </div>
     <div id="customCarousel1" class="carousel slide" data-ride="carousel">
        <div class="carousel-inner">
@@ -12,15 +13,14 @@
                       <div class="detail-box">
                          <h1>
                             <span>
-                            Sale 20% Off
+                            Sale {{sd.sale}} Off
                             </span>
                             <br>
                             On Everything
                          </h1>
                          <p>
-                           We're thrilled to kick off the season with an exclusive promotion just for you! For a limited time, take advantage of a fantastic 20% discount on our diverse range of products.                         </p>
-                         <div class="btn-box">
-                            <a href="" class="btn1">
+                           {{sd.text_para}}                         <div class="btn-box">
+                            <a href="{{sd.link}}" class="btn1">
                             Shop Now
                             </a>
                          </div>
@@ -29,57 +29,8 @@
                 </div>
              </div>
           </div>
-          <div class="carousel-item ">
-             <div class="container ">
-                <div class="row">
-                   <div class="col-md-7 col-lg-6 ">
-                      <div class="detail-box">
-                         <h1>
-                            <span>
-                            Sale 20% Off
-                            </span>
-                            <br>
-                            On Everything
-                         </h1>
-                         <p>
-                            Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
-                         </p>
-                         <div class="btn-box">
-                            <a href="" class="btn1">
-                            Shop Now
-                            </a>
-                         </div>
-                      </div>
-                   </div>
-                </div>
-             </div>
-          </div>
-          <div class="carousel-item">
-             <div class="container ">
-                <div class="row">
-                   <div class="col-md-7 col-lg-6 ">
-                      <div class="detail-box">
-                         <h1>
-                            <span>
-                            Sale 20% Off
-                            </span>
-                            <br>
-                            On Everything
-                         </h1>
-                         <p>
-                            Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
-                         </p>
-                         <div class="btn-box">
-                            <a href="" class="btn1">
-                            Shop Now
-                            </a>
-                         </div>
-                      </div>
-                   </div>
-                </div>
-             </div>
-          </div>
-       </div>
+          
+          
        <div class="container">
           <ol class="carousel-indicators">
              <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
@@ -89,3 +40,4 @@
        </div>
     </div>
  </section>
+ {% endfor %}
