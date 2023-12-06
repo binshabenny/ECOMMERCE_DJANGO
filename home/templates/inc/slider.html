@@ -1,43 +1,54 @@
 {% load static %}
-{% for sd in banners %}
-<section class="slider_section ">
+
+<!-- slider section -->
+<section class="slider_section">
     <div class="slider_bg_box">
-       <img src={{sd.image.url}} alt="">
+        <!-- Use the first banner's image as the background image -->
+        {% if banners %}
+            <img src="{{ banners.0.image.url }}" alt="">
+        {% endif %}
     </div>
     <div id="customCarousel1" class="carousel slide" data-ride="carousel">
-       <div class="carousel-inner">
-          <div class="carousel-item active">
-             <div class="container ">
-                <div class="row">
-                   <div class="col-md-7 col-lg-6 ">
-                      <div class="detail-box">
-                         <h1>
-                            <span>
-                            Sale {{sd.sale}} Off
-                            </span>
-                            <br>
-                            On Everything
-                         </h1>
-                         <p>
-                           {{sd.text_para}}                         <div class="btn-box">
-                            <a href="{{sd.link}}" class="btn1">
-                            Shop Now
-                            </a>
-                         </div>
-                      </div>
-                   </div>
+        <div class="carousel-inner">
+            {% for banner in banners %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-7 col-lg-6">
+                                <div class="detail-box">
+                                    <h1>
+                                        <span>
+                                            Sale {{ banner.sale }}% Off
+                                        </span>
+                                        <br>
+                                        On Everything
+                                    </h1>
+                                    <p>
+                                        {{ banner.text_para }}
+                                    </p>
+                                    <div class="btn-box">
+                                        <a href="{{ banner.link }}" class="btn1">
+                                            Shop Now
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-             </div>
-          </div>
-          
-          
-       <div class="container">
-          <ol class="carousel-indicators">
-             <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
-             <li data-target="#customCarousel1" data-slide-to="1"></li>
-             <li data-target="#customCarousel1" data-slide-to="2"></li>
-          </ol>
-       </div>
+            {% endfor %}
+        </div>
+        <div class="container">
+            <ol class="carousel-indicators">
+                {% for banner in banners %}
+                    <li data-target="#customCarousel1" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+                {% endfor %}
+            </ol>
+        </div>
     </div>
- </section>
- {% endfor %}
+</section>
+<!-- end slider section -->
+
+
+
+

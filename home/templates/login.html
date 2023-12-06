@@ -24,7 +24,8 @@
               <div class="col-md-6 col-lg-7 d-flex align-items-center">
                 <div class="card-body p-4 p-lg-5 text-black">
   
-                  <form>
+                  <form method="post">
+                    {% csrf_token %}
   
                     <div class="d-flex align-items-center mb-3 pb-1">
                       <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
@@ -48,11 +49,14 @@
                     </div>
   
                     <a class="small text-muted" href="#!">Forgot password?</a>
-                    <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="#!"
+                    <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="{%url 'register'%}"
                         style="color: #393f81;">Register here</a></p>
                     <a href="#!" class="small text-muted">Terms of use.</a>
                     <a href="#!" class="small text-muted">Privacy policy</a>
                   </form>
+                  {% for messages in messages%}
+                  <h3 style="color: red;">{{messages}}</h3>
+                   {% endfor %}
   
                 </div>
               </div>
