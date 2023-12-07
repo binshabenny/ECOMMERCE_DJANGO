@@ -5,6 +5,7 @@ from .models import Product
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.http import HttpResponse
+from django.contrib.auth import authenticate,login
 
 # Create your views her
 def index(request):
@@ -30,14 +31,16 @@ def logpage(request):
         'banners':banner
     }
     if request.method == "POST":
-        email = request.POST['email']
+        username = request.POST['username']
         password = request.POST['password']
-        user = auth.authenticate(email=email,password=password)
+        user = auth.authenticate(username=username,password=password)
         if user is not None:
-            auth.login(request,user)
+            
+            auth.login(request, user)
             return redirect('/')
         else:
-            messages.info(request,"Invalid Login")
+          
+            messages.info(request, "Invalid Login")
             return redirect('/login')
             
 
@@ -105,6 +108,10 @@ def productview(request,cate_slug,prod_slug):
     else:
         messages.error(request,'no such category found')
         return redirect('collections')
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
 
     
 

@@ -9,6 +9,8 @@ urlpatterns = [
     path('login/',views.logpage,name="login"),
     path('reg/',views.register,name="register"),
     path('collections/<str:cate_slug>/<str:prod_slug>',views.productview,name="productview"),
+    path('logout/',views.logout,name="logout"),
+
 
 
 ]
