@@ -6,6 +6,7 @@ from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth import authenticate,login
+from django.contrib.auth.decorators import login_required
 
 # Create your views her
 def index(request):
@@ -15,8 +16,11 @@ def index(request):
     }
     return render(request,'index.html',dict)
 
+@login_required(login_url='login')
 def collections(request):
+    
     category = Category.objects.filter(status=0)
+    
     banner = Slider.objects.all()
     dict1 ={
         'banners':banner,
@@ -114,4 +118,8 @@ def logout(request):
     return redirect('/')
 
     
+def contact(request):
+    return render(request,'contact.html')
 
+def test(request):
+    return render(request,'test.html')
