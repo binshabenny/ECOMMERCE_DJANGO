@@ -1,4 +1,4 @@
-{% extends 'layouts/main.html' %}
+{% extends 'layouts/submain.html' %}
 {% load static %}
 
 {% block body %}
@@ -17,7 +17,7 @@
                <div class="option_container">
                   <div class="options">
                     
-                     <a href="" class="option2">
+                     <a href="{% url 'detail_view'  prod_slug=item.slug %}" class="option2">
                      View
                      </a>
                   </div>
@@ -30,10 +30,10 @@
                      {{item.name}}
                   </h5>
                 <h6>
-                    ${{item.original_price}}
+                    {{item.original_price}}
                 </h6>
                </div>
-               <h4>${{item.selling_price}}
+               <h4>{{item.selling_price}}
 
                </h4>
                

@@ -12,6 +12,9 @@ urlpatterns = [
     path('logout/',views.logout,name="logout"),
     path('test/',views.test,name="test"),
     path('contact/',views.contact,name="contact"),
+    path('detail_view/<str:prod_slug>/', views.detail_view, name='detail_view'),
+
+
 
 
 

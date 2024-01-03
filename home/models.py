@@ -37,4 +37,19 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
+class ProductDetailView(models.Model):
+
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    pdt_colour = models.CharField(max_length=100,null=False,blank = False)
+    pdt_description = models.TextField(max_length=250,null=False,blank = False)
+    pdt_image1 = models.ImageField(upload_to="detail_img",null =False,blank=False)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.pdt_colour}"
+
+    def get_product_image(self):
+        return self.product.product_image
+
+
+    
 

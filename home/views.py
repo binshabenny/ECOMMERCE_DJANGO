@@ -1,7 +1,8 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import Slider
 from .models import Category
 from .models import Product
+from .models import ProductDetailView
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.http import HttpResponse
@@ -99,9 +100,10 @@ def product(request):
         'product':product,
     }
     
-    return render(request,'product.html',dict)
+    return render(request,'product.html',dict1)
 
 def productview(request,cate_slug,prod_slug):
+    
     if(Category.objects.filter(slug=cate_slug,status = 0)):
         if(Product.objects.filter(slug=prod_slug,status=0)):
             bd = Product.objects.filter(slug=prod_slug,status=0)
@@ -112,6 +114,22 @@ def productview(request,cate_slug,prod_slug):
     else:
         messages.error(request,'no such category found')
         return redirect('collections')
+    
+
+def detail_view(request, prod_slug):
+        
+        product = get_object_or_404(Product, slug=prod_slug, status=0)
+        product_details = ProductDetailView.objects.filter(product=product)
+
+
+        context = {
+            'product': product,
+            'product_details': product_details,
+            }
+
+        return render(request, 'detail_view.html', context)
+    
+
 
 def logout(request):
     auth.logout(request)

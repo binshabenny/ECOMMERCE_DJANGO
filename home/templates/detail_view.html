@@ -1,0 +1,77 @@
+{% extends 'layouts/submain.html' %}
+{% load static %}
+
+{% block body %}
+<!-- product section -->
+<section class="product_section layout_padding">
+   <div class="container">
+      <div class="heading_container heading_center">
+         <h2>
+            your <span>selected product</span>
+         </h2>
+      </div>
+     
+      <div class="row">
+        {% for detail in product_details %}
+         <div class="col-md-6">
+            <div class="box">
+               <div class="img-box">
+                    <img src="{{product.product_image.url}}" alt="">
+               </div>
+               <div class="detail-box">
+                   <h5>{{detail.product.name }}</h5>
+                   <h5>{{detail.product.selling_price}}</h5>
+                  
+         
+               </div>
+            </div>
+         </div>
+         <div class="col-md-6">
+            <div class="box">
+               <div class="detail-box">
+                  <p><em>{{ detail.pdt_description }}</em></p>
+               </div>
+               <div class="detail-box">
+        
+                <h5>Color: {{ detail.pdt_colour }}</h5>
+                
+             </div>
+             <div class="detail-box">
+                <label for="size">Select Size:</label>
+                <select id="size" name="size">
+                    <option value="small">S</option>
+                    <option value="medium">M</option>
+                    <option value="large">L</option>
+                    <option value="extralarge">XL</option>
+                    <option value="doublexlarge">XXL</option>
+
+
+                    <!-- Add more size options as needed -->
+                 </select>
+
+             </div>
+               
+               <div class="options">
+                  <a href="#" class="option2">
+                     Add To Cart
+                  </a>
+               </div>
+            </div>
+            <div class="box">
+               <div class="img-box">
+                  <img src="{{detail.pdt_image1.url}}" alt="">
+               </div>
+            </div>
+         </div>
+        {% endfor %}
+      </div>
+      <div class="btn-box">
+         <a href="{% url 'collections' %}">
+            View All products
+         </a>
+      </div>
+   </div>
+</section>
+<!-- end product section -->
+{% endblock %}
+
