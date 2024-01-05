@@ -1,9 +1,15 @@
 {% extends 'layouts/submain.html' %}
 {% load static %}
+{%block body%}
+{% for message in messages %}
+   
+        {{ message }}
+    </div>
+{% endfor %}
 
-{% block body %}
 <form method="post">
     {% csrf_token %}
     <input type="submit" value="Add to Cart">
 </form>
-{%endblock%}
+
+{% endblock %}

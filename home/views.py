@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .models import Slider
 from .models import Category
 from .models import Product
-from .models import ProductDetailView
+from .models import ProductDetailView,CartItem,Cart
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.http import HttpResponse
@@ -121,14 +121,144 @@ def detail_view(request, prod_slug):
         product = get_object_or_404(Product, slug=prod_slug, status=0)
         product_details = ProductDetailView.objects.filter(product=product)
 
-
+        if request.method == "POST":
+            messages.success(request, f"{product.name} added to your cart.")
+            return redirect("add_to_cart", product_id=product.id)
+            
         context = {
             'product': product,
             'product_details': product_details,
             }
 
         return render(request, 'detail_view.html', context)
+
+
+
+
+def view_cart(request):
+
+    if request.user.is_authenticated:
+        cart_items = CartItem.objects.filter(user=request.user)
+        return render(request, 'view_cart.html', {'cart_items': cart_items})
+    return redirect('login')  # Redirect to login page if user is not authenticated
+@login_required
+def cart_detail(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    total_price = sum(item.quantity * item.product.selling_price for item in cart_items)
+
+    context = {
+        "cart_items": cart_items,
+        "total_price": total_price,
+    }
+
+    return render(request, "cart/cart_detail.html", context)
+
+@login_required
+def cart(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    print(f"User: {request.user}")
+    print(f"Cart Items: {cart_items}")
     
+    # Initialize total_price for all cart items
+    total_price = 0
+
+    # List to store details of each cart item
+    cart_details = []
+
+    for item in cart_items:
+        # Calculate the total price for each cart item
+        item_total_price = item.quantity * item.product.selling_price
+
+        # Add the individual product price to the total_price
+        total_price += item_total_price
+
+        # Apply discount
+        discount = 60.00
+        discounted_total_price = max(0, total_price - discount)
+
+        # Apply tax
+        tax = 14.00
+        total_with_tax = discounted_total_price + tax
+
+        # Append cart item details to the list
+        cart_details.append({
+            'product_id': item.product.id,
+            'cart_item_id': item.id,
+            'product_name': item.product.name,
+            'selling_price':item.product.selling_price,
+            'product_img':item.product.product_image,
+            'quantity': item.quantity,
+            'price_per_piece': item.product.selling_price,
+            'total_price': item_total_price,
+            "discounted_total_price": discounted_total_price,
+            "tax": tax,
+            "discount":discount,
+            "total_with_tax": total_with_tax,
+        })
+
+    context = {
+        'cart_details': cart_details,
+        'total_price': total_price,
+    }
+
+    return render(request, "cart.html", context)
+
+
+@login_required
+def add_to_cart(request, product_id):
+    # Get the Product instance using the provided product_id
+    product = get_object_or_404(Product, id=product_id)
+
+    # Check if the user already has this product in the cart
+    cart_item = Cart.objects.filter(user=request.user, product=product).first()
+
+    if cart_item:
+        # If the product is already in the cart, increase the quantity
+        cart_item.quantity += 1
+        cart_item.save()
+        messages.success(request, "Item added to your cart.")
+    else:
+        # If the product is not in the cart, create a new cart item
+        Cart.objects.create(user=request.user, product=product, quantity=1)
+        messages.success(request, "Item added to your cart.")
+
+    return redirect("cart")
+
+@login_required
+def remove_from_cart(request, product_id):
+    # Get the Product instance using the provided product_id
+    product = get_object_or_404(Product, id=product_id)
+    
+
+    cart_item = Cart.objects.filter(user=request.user, product=product).first()
+
+    # If a cart item is found, decrement the quantity by 1
+    if cart_item:
+        cart_item.quantity -= 1
+
+        # If the quantity becomes zero, remove the cart item
+        if cart_item.quantity <= 0:
+            cart_item.delete()
+            messages.success(request, "Item removed from your cart.")
+        else:
+            cart_item.save()
+            messages.success(request, "Quantity updated in your cart.")
+
+    return redirect("cart")
+
+@login_required
+def update_cart_item(request, cart_item_id):
+    cart_item = get_object_or_404(CartItem, id=cart_item_id)
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        cart_item.quantity = quantity
+        cart_item.save()
+        # You may want to redirect to the cart page or return a JSON response
+        # with the updated total price and any other necessary information.
+    return redirect('cart')  # Update with your cart page URL
+
+
+
 
 
 def logout(request):
