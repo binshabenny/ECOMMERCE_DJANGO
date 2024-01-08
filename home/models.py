@@ -43,7 +43,7 @@ class Product(models.Model):
     
 class ProductDetailView(models.Model):
 
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE, null=False, blank=False)
     pdt_colour = models.CharField(max_length=100,null=False,blank = False)
     pdt_description = models.TextField(max_length=250,null=False,blank = False)
     pdt_image1 = models.ImageField(upload_to="detail_img",null =False,blank=False)
