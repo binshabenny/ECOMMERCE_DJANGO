@@ -156,9 +156,7 @@ def cart_detail(request):
 @login_required
 def cart(request):
     cart_items = Cart.objects.filter(user=request.user)
-    print(f"User: {request.user}")
-    print(f"Cart Items: {cart_items}")
-    
+
     # Initialize total_price for all cart items
     total_price = 0
 
@@ -172,42 +170,45 @@ def cart(request):
         # Add the individual product price to the total_price
         total_price += item_total_price
 
-        # Apply discount
-        discount = 60.00
-        discounted_total_price = max(0, total_price - discount)
-
-        # Apply tax
-        tax = 14.00
-        total_with_tax = discounted_total_price + tax
-         
-
         # Append cart item details to the list
         cart_details.append({
             'product_id': item.product.id,
             'cart_item_id': item.id,
             'product_name': item.product.name,
-            'selling_price':item.product.selling_price,
-            'product_img':item.product.product_image,
+            'selling_price': item.product.selling_price,
+            'product_img': item.product.product_image,
             'quantity': item.quantity,
             'price_per_piece': item.product.selling_price,
             'total_price': item_total_price,
-            "discounted_total_price": discounted_total_price,
-            "tax": tax,
-            "discount":discount,
-            "total_with_tax": total_with_tax,
         })
-    
+
+    # Apply discount, tax, and calculate total_with_tax
+    discount = 60.00
+    discounted_total_price = max(0, total_price - discount)
+
+    tax = 14.00
+    total_with_tax = discounted_total_price + tax
+
     # Append recommended items to cart_details
     recommended_items = Product.objects.filter(trending=True)[:4]
-   
+
+    # Create a summary dictionary
+    summary = {
+        'total_price': total_price,
+        'discounted_total_price': discounted_total_price,
+        'discount': discount,
+        'tax': tax,
+        'total_with_tax': total_with_tax,
+    }
 
     context = {
         'cart_details': cart_details,
-        'total_price': total_price,
         'recommended_items': recommended_items,
+        'summary': summary,
     }
 
     return render(request, "cart.html", context)
+
 
 
 @login_required
