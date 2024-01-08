@@ -179,6 +179,7 @@ def cart(request):
         # Apply tax
         tax = 14.00
         total_with_tax = discounted_total_price + tax
+         
 
         # Append cart item details to the list
         cart_details.append({
@@ -195,10 +196,15 @@ def cart(request):
             "discount":discount,
             "total_with_tax": total_with_tax,
         })
+    
+    # Append recommended items to cart_details
+    recommended_items = Product.objects.filter(trending=True)[:4]
+   
 
     context = {
         'cart_details': cart_details,
         'total_price': total_price,
+        'recommended_items': recommended_items,
     }
 
     return render(request, "cart.html", context)
